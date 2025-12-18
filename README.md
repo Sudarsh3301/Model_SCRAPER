@@ -1,4 +1,4 @@
-# APM Models Enhanced Scraper
+# Models Enhanced Scraper
 
 A robust, production-ready web scraper for extracting model portfolios from apmmodels.com. This scraper uses Selenium WebDriver for JavaScript-heavy pages and implements a three-stage pipeline for comprehensive data extraction.
 

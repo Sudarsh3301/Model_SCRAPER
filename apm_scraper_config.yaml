@@ -1,0 +1,90 @@
+# Enhanced APM Models Scraper Configuration
+# Based on detailed recon report for https://apmmodels.com/
+
+# Base configuration
+base_url: https://apmmodels.com
+index_url: https://apmmodels.com/w/models/
+user_agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36
+
+# Browser settings
+headless: true
+
+# Performance settings
+max_workers: 4
+request_delay: 1.5
+max_retries: 3
+timeout: 30
+
+# Supported divisions
+divisions:
+  - ima
+  - mai
+  - dev
+
+# CSS Selectors following recon report
+selectors:
+  alphabet_index:
+    letter_group: div.models > div.letter
+    model_list_items: li.model-entry
+    model_name: li.model-entry a
+    profile_url: li.model-entry a::attr(href)
+    model_id: li.model-entry::attr(data-id)
+    divisions_meta: li.model-entry::attr(data-divisions)
+    thumbnail_url: li.model-entry img::attr(src)
+    thumbnail_alt: li.model-entry img::attr(alt)
+  
+  profile_page:
+    feature_rows: table.model-features tr.model-feature
+    feature_name: .model-feature-name
+    feature_value: .model-feature-value
+    gallery_images: div.picture-frame img::attr(src)
+
+# Expected model attributes (normalized schema)
+expected_attributes:
+  - height
+  - bust
+  - waist
+  - hips
+  - shoes
+  - hair
+  - eyes
+
+# Data validation rules
+validation:
+  min_images_per_model: 1
+  required_divisions:
+    - ima
+    - mai
+    - dev
+
+# Resource limits
+limits:
+  max_images_per_model: 15  # Maximum images per model (including thumbnail)
+
+# Alternative selectors (fallback options)
+fallback_selectors:
+  model_cards:
+    - a.cover-img-wrapper
+    - a[href*="/models/"]
+    - a[href*="dev-"], a[href*="ima-"], a[href*="mai-"]
+    - .model-card a
+    - .model a
+  
+  feature_tables:
+    - table.model-features
+    - .model-features
+    - table[class*="feature"]
+    - table[class*="model"]
+    - table[class*="info"]
+    - .features table
+    - .model-info table
+    - table
+  
+  gallery_images:
+    - div.picture-frame img
+    - .picture-frame img
+    - .gallery img
+    - .photos img
+    - .images img
+    - .portfolio img
+    - img[src*="jpg"], img[src*="jpeg"], img[src*="png"]
